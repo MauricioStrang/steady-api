@@ -12,12 +12,12 @@ export class UserService {
     private readonly userRepository: Repository<User>
   ){}
   async create(createUserDto: CreateUserDto) {
-    const {username, email, password}= createUserDto
-    const emailExist = await this.userRepository.findOne({where:{email}})
-
-    if (emailExist) {
-      return `Email is already in use`
-    }
+    const {username, email, password}= createUserDto  
+    
+    // const emailDoesExist = this.emailExists(email)
+    // if (emailDoesExist) {
+    //   return `Email is already in use`
+    // }
     
     const newUser= this.userRepository.create({
       username,
@@ -32,6 +32,21 @@ export class UserService {
     return 'no'
   }
 
+  async emailExists(email){
+    const objEmail = email.email
+    try {
+      const doesEmailExist = await this.userRepository.findOneBy({email: objEmail})
+      
+      if (doesEmailExist) {
+        return true
+      }
+      throw new Error('email doesnt exist')
+    } catch (error) {
+      console.log(error, 'error');
+      return error
+    }
+    
+  }
   findAll() {
     return `This action returns all user`;
   }

@@ -12,6 +12,11 @@ export class UserController {
     return this.userService.create(createUserDto);
   }
 
+  @Post('emailcheck')
+  checkEmail(@Body() email: string) {
+    return this.userService.emailExists(email);
+  }
+
   @Get()
   findAll() {
     return this.userService.findAll();
